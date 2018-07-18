@@ -23,6 +23,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -39,15 +41,22 @@ public class ComeToSoleilFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_come_to_soleil, container, false);
         WebView webView = view.findViewById(R.id.webView);
-        final ProgressBar dialog =  view.findViewById(R.id.progressBar);
+
+        final ProgressBar progressBar = view.findViewById(R.id.progressBar);
+        progressBar.setIndeterminate(true);
+        progressBar.bringToFront();
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                //System.out.println("OK!");
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                progressBar.setVisibility(View.GONE);
             }
         });
-        dialog.setIndeterminate(true);
         webView.loadUrl("https://www.synchrotron-soleil.fr/en/come-soleil");
 
         WebSettings webSettings = webView.getSettings();

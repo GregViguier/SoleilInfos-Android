@@ -7,8 +7,13 @@
         android:title="@string/machine_status"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_schedules"
+        android:id="@+id/action_come_to"
         android:icon="@android:drawable/ic_lock_lock"
         android:title="@string/other"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_about"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/about"
         app:showAsAction="ifRoom" />
 </menu>

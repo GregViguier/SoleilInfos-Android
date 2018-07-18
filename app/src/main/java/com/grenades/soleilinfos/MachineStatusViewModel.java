@@ -36,7 +36,9 @@ import java.util.TimerTask;
 public class MachineStatusViewModel extends ViewModel {
 
     private MutableLiveData<Bitmap> image = new MutableLiveData<>();
-    public static String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
+
+    private static String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
+    private static int TIME_OUT = 10000;
 
     public MachineStatusViewModel() {
         new Timer().schedule(new MyTimerTask(), 0, 60000);
@@ -53,12 +55,8 @@ public class MachineStatusViewModel extends ViewModel {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        try {
                             MyTask performBackgroundTask = new MyTask();
                             performBackgroundTask.execute(IMAGE_URL);
-                        } catch (Exception e) {
-                            Log.e("MachineStatusVM", "Error while refreshing data", e);
-                        }
                     }
                 });
         }
@@ -70,12 +68,23 @@ public class MachineStatusViewModel extends ViewModel {
 
             Bitmap bitmap = null;
             try {
+                int i = 0;
                 URL url = new URL(urlToLoads[0]);
+                Log.d("TAG", "doInBackground" + i++);
+
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                Log.d("TAG", "doInBackground" + i++);
+
+                connection.setConnectTimeout(TIME_OUT);
+                connection.setReadTimeout(TIME_OUT);
                 InputStream inputStream = connection.getInputStream();
+                Log.d("TAG", "doInBackground" + i++);
+
                 bitmap = BitmapFactory.decodeStream(inputStream);
+                Log.d("TAG", "doInBackground: END ");
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("TAG", "doInBackground: ", e);
+                // bitmap is already null
             }
             return bitmap;
         }

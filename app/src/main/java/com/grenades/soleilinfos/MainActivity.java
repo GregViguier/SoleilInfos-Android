@@ -26,8 +26,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.grenades.soleilinfos.fragments.MachineStatusFragment;
 import com.grenades.soleilinfos.fragments.ComeToSoleilFragment;
+import com.grenades.soleilinfos.fragments.MachineStatusFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                                 MachineStatusFragment machineStatusFragment = new MachineStatusFragment();
                                 loadFragment(machineStatusFragment);
                                 break;
-                            case R.id.action_schedules:
+                            case R.id.action_come_to:
                                 ComeToSoleilFragment comeToSoleilFragment = new ComeToSoleilFragment();
                                 loadFragment(comeToSoleilFragment);
                                 break;
