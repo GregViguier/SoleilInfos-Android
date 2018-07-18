@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SOLEIL Info</string>
+    <string name="machine_status">Machine Status</string>
+    <string name="other">Come To</string>
+    <string name="soleil_logo">SOLEIL Logo</string>
+    <string name="title_activity_web_site">WebSiteActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
