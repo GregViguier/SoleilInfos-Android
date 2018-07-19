@@ -39,26 +39,37 @@ public class MachineStatusViewModel extends ViewModel {
 
     private static String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
     private static int TIME_OUT = 10000;
+    private MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
+    private int timeBeforeRefresh = 0;
 
     public MachineStatusViewModel() {
-        new Timer().schedule(new MyTimerTask(), 0, 60000);
+        new Timer().schedule(new MyTimerTask(), 500, 2000);
     }
 
     public MutableLiveData<Bitmap> getImage() {
         return image;
     }
 
-    class MyTimerTask extends TimerTask {
-            Handler handler = new Handler();
+    public MutableLiveData<Integer> getTimeBeforeRefresh() {
+        return timeBeforeRefreshLiveData;
+    }
 
-            @Override
-            public void run() {
+    class MyTimerTask extends TimerTask {
+        Handler handler = new Handler();
+
+        @Override
+        public void run() {
+            timeBeforeRefresh -= 2;
+            timeBeforeRefreshLiveData.postValue(timeBeforeRefresh);
+            if (timeBeforeRefresh <= 0) {
+                timeBeforeRefresh = 60;
                 handler.post(new Runnable() {
                     public void run() {
-                            MyTask performBackgroundTask = new MyTask();
-                            performBackgroundTask.execute(IMAGE_URL);
+                        MyTask performBackgroundTask = new MyTask();
+                        performBackgroundTask.execute(IMAGE_URL);
                     }
                 });
+            }
         }
     }
 
@@ -70,18 +81,14 @@ public class MachineStatusViewModel extends ViewModel {
             try {
                 int i = 0;
                 URL url = new URL(urlToLoads[0]);
-                Log.d("TAG", "doInBackground" + i++);
 
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                Log.d("TAG", "doInBackground" + i++);
 
                 connection.setConnectTimeout(TIME_OUT);
                 connection.setReadTimeout(TIME_OUT);
                 InputStream inputStream = connection.getInputStream();
-                Log.d("TAG", "doInBackground" + i++);
 
                 bitmap = BitmapFactory.decodeStream(inputStream);
-                Log.d("TAG", "doInBackground: END ");
             } catch (IOException e) {
                 Log.e("TAG", "doInBackground: ", e);
                 // bitmap is already null

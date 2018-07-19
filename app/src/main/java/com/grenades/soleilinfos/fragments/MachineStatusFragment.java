@@ -37,6 +37,8 @@ import com.grenades.soleilinfos.R;
 
 public class MachineStatusFragment extends Fragment {
 
+    public static final int REFRESH_PERIOD = 60;
+
     public MachineStatusFragment() {
         // Required empty public constructor
     }
@@ -53,6 +55,7 @@ public class MachineStatusFragment extends Fragment {
         final TextView errorTextView = view.findViewById(R.id.errorTextView);
         final ProgressBar progressBar = view.findViewById(R.id.machine_status_progressBar);
         final ProgressBar timeBeforeNextLoadProgressBar = view.findViewById(R.id.horizontalProgressBar);
+        timeBeforeNextLoadProgressBar.setMax(60);
 
         // Instanciate maxtrix for Rotation
         final Matrix matrix = new Matrix();
@@ -77,6 +80,12 @@ public class MachineStatusFragment extends Fragment {
                 }
             }
 
+        });
+        viewerModel.getTimeBeforeRefresh().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                timeBeforeNextLoadProgressBar.setProgress(REFRESH_PERIOD - integer);
+            }
         });
         return view;
     }
