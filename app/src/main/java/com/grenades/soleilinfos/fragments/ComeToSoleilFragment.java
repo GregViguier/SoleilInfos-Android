@@ -19,6 +19,7 @@
 package com.grenades.soleilinfos.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +36,10 @@ import com.grenades.soleilinfos.R;
 public class ComeToSoleilFragment extends Fragment {
 
 
+    public static final String COME_TO_SOLEIL_URL = "https://www.synchrotron-soleil.fr/en/come-soleil";
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_come_to_soleil, container, false);
@@ -57,7 +60,7 @@ public class ComeToSoleilFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
-        webView.loadUrl("https://www.synchrotron-soleil.fr/en/come-soleil");
+        webView.loadUrl(COME_TO_SOLEIL_URL);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);

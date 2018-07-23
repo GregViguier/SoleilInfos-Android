@@ -20,11 +20,14 @@ package com.grenades.soleilinfos.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,21 +38,29 @@ import android.widget.TextView;
 import com.grenades.soleilinfos.MachineStatusViewModel;
 import com.grenades.soleilinfos.R;
 
-public class MachineStatusFragment extends Fragment {
+public class MachineStatusFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final int REFRESH_PERIOD = 60;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private final Matrix matrix = new Matrix();
+
 
     public MachineStatusFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_machine_status, container, false);
-
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setRefreshing(true);
         final ImageView imageView = view.findViewById(R.id.imageView);
         final ImageView errorImageView = view.findViewById(R.id.errorImageView);
         final TextView errorTextView = view.findViewById(R.id.errorTextView);
@@ -58,14 +69,16 @@ public class MachineStatusFragment extends Fragment {
         timeBeforeNextLoadProgressBar.setMax(60);
 
         // Instanciate maxtrix for Rotation
-        final Matrix matrix = new Matrix();
-        matrix.postRotate(90);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            matrix.postRotate(90);
+        }
 
         MachineStatusViewModel viewerModel = ViewModelProviders.of(this).get(MachineStatusViewModel.class);
         viewerModel.getImage().observe(this, new Observer<Bitmap>() {
             @Override
             public void onChanged(@Nullable Bitmap bitmap) {
                 progressBar.setVisibility(View.INVISIBLE);
+                swipeRefreshLayout.setRefreshing(false);
                 if (bitmap != null) {
                     // Hide error widgets
                     errorImageView.setVisibility(View.INVISIBLE);
@@ -90,4 +103,10 @@ public class MachineStatusFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRefresh() {
+        MachineStatusViewModel viewerModel = ViewModelProviders.of(this).get(MachineStatusViewModel.class);
+        viewerModel.refreshData();
+        swipeRefreshLayout.setRefreshing(false);
+    }
 }

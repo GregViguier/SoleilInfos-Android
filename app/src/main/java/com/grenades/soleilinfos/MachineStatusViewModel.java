@@ -23,8 +23,6 @@ import android.arch.lifecycle.ViewModel;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,10 +33,12 @@ import java.util.TimerTask;
 
 public class MachineStatusViewModel extends ViewModel {
 
-    private MutableLiveData<Bitmap> image = new MutableLiveData<>();
+    private final MutableLiveData<Bitmap> image = new MutableLiveData<>();
 
     private static String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
-    private static int TIME_OUT = 10000;
+    private static final int CONNECTION_TIME_OUT = 10000;
+    private static final int REFRESH_STEP = 2;
+    private static final int REFRESH_PERIOD = 60;
     private MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
     private int timeBeforeRefresh = 0;
 
@@ -55,25 +55,24 @@ public class MachineStatusViewModel extends ViewModel {
     }
 
     class MyTimerTask extends TimerTask {
-        Handler handler = new Handler();
 
         @Override
         public void run() {
-            timeBeforeRefresh -= 2;
+            timeBeforeRefresh -= REFRESH_STEP;
             timeBeforeRefreshLiveData.postValue(timeBeforeRefresh);
             if (timeBeforeRefresh <= 0) {
-                timeBeforeRefresh = 60;
-                handler.post(new Runnable() {
-                    public void run() {
-                        MyTask performBackgroundTask = new MyTask();
-                        performBackgroundTask.execute(IMAGE_URL);
-                    }
-                });
+                refreshData();
             }
         }
     }
 
-    class MyTask extends AsyncTask<String, Void, Bitmap> {
+    public void refreshData() {
+        timeBeforeRefresh = REFRESH_PERIOD;
+        LoadDataTask performBackgroundTask = new LoadDataTask();
+        performBackgroundTask.execute(IMAGE_URL);
+    }
+
+    class LoadDataTask extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected Bitmap doInBackground(String... urlToLoads) {
 
@@ -83,14 +82,12 @@ public class MachineStatusViewModel extends ViewModel {
                 URL url = new URL(urlToLoads[0]);
 
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-                connection.setConnectTimeout(TIME_OUT);
-                connection.setReadTimeout(TIME_OUT);
+                connection.setConnectTimeout(CONNECTION_TIME_OUT);
+                connection.setReadTimeout(CONNECTION_TIME_OUT);
                 InputStream inputStream = connection.getInputStream();
 
                 bitmap = BitmapFactory.decodeStream(inputStream);
             } catch (IOException e) {
-                Log.e("TAG", "doInBackground: ", e);
                 // bitmap is already null
             }
             return bitmap;
