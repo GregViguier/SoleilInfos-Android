@@ -26,6 +26,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.grenades.soleilinfos.fragments.AboutFragment;
 import com.grenades.soleilinfos.fragments.ComeToSoleilFragment;
 import com.grenades.soleilinfos.fragments.MachineStatusFragment;
 
@@ -52,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.action_come_to:
                                 ComeToSoleilFragment comeToSoleilFragment = new ComeToSoleilFragment();
                                 loadFragment(comeToSoleilFragment);
+                                break;
+                            case R.id.action_about:
+                                AboutFragment aboutFragment = new AboutFragment();
+                                loadFragment(aboutFragment);
                                 break;
                         }
                         return true;

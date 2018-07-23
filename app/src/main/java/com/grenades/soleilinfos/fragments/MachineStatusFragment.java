@@ -64,7 +64,6 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         final ImageView imageView = view.findViewById(R.id.imageView);
         final ImageView errorImageView = view.findViewById(R.id.errorImageView);
         final TextView errorTextView = view.findViewById(R.id.errorTextView);
-        final ProgressBar progressBar = view.findViewById(R.id.machine_status_progressBar);
         final ProgressBar timeBeforeNextLoadProgressBar = view.findViewById(R.id.horizontalProgressBar);
         timeBeforeNextLoadProgressBar.setMax(60);
 
@@ -77,7 +76,6 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         viewerModel.getImage().observe(this, new Observer<Bitmap>() {
             @Override
             public void onChanged(@Nullable Bitmap bitmap) {
-                progressBar.setVisibility(View.INVISIBLE);
                 swipeRefreshLayout.setRefreshing(false);
                 if (bitmap != null) {
                     // Hide error widgets

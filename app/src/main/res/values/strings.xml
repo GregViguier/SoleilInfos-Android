@@ -7,4 +7,7 @@
     <string name="soleil_logo">SOLEIL Logo</string>
     <string name="error_loading_message">Network unavailable</string>
     <string name="loading_message">Loading Machine Status...</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="about_legal_text">Disclaimer:\nPortions of the materials used are trademarks and/or copyrighted works of Synchrotron SOLEIL.\n\nAll rights reserved by Synchrotron SOLEIL.\n\nThis material is not official and is not endorsed by Synchrotron SOLEIL."</string>
 </resources>
