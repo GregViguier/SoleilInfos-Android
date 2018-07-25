@@ -18,6 +18,7 @@
 
 package com.grenades.soleilinfos.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -36,8 +37,9 @@ import com.grenades.soleilinfos.R;
 public class ComeToSoleilFragment extends Fragment {
 
 
-    public static final String COME_TO_SOLEIL_URL = "https://www.synchrotron-soleil.fr/en/come-soleil";
+    private static final String COME_TO_SOLEIL_URL = "https://www.synchrotron-soleil.fr/en/come-soleil";
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

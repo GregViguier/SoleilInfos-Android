@@ -22,7 +22,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+
+import com.grenades.soleilinfos.util.SoleilInfosHandlerThread;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,15 +37,26 @@ public class MachineStatusViewModel extends ViewModel {
 
     private final MutableLiveData<Bitmap> image = new MutableLiveData<>();
 
-    private static String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
+    private static final String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
     private static final int CONNECTION_TIME_OUT = 10000;
     private static final int REFRESH_STEP = 2;
     private static final int REFRESH_PERIOD = 60;
-    private MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
     private int timeBeforeRefresh = 0;
+    private SoleilInfosHandlerThread loadDataThread;
 
     public MachineStatusViewModel() {
         new Timer().schedule(new MyTimerTask(), 500, 2000);
+
+        loadDataThread = new SoleilInfosHandlerThread("Refresh Data Thread");
+        loadDataThread.start();
+        loadDataThread.prepareHandler();
+    }
+
+    @Override
+    protected void onCleared() {
+        loadDataThread.quit();
+        super.onCleared();
     }
 
     public MutableLiveData<Bitmap> getImage() {
@@ -54,48 +67,51 @@ public class MachineStatusViewModel extends ViewModel {
         return timeBeforeRefreshLiveData;
     }
 
-    class MyTimerTask extends TimerTask {
+    public void refreshDataAsync() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                loadData(IMAGE_URL);
+                timeBeforeRefresh = REFRESH_PERIOD;
+            }
+        };
+        loadDataThread.postTask(runnable);
+    }
 
+    @Nullable
+    private Bitmap loadData(String urlToLoad) {
+        Bitmap bitmap = null;
+        HttpURLConnection connection = null;
+        try {
+            int i = 0;
+            URL url = new URL(urlToLoad);
+
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(CONNECTION_TIME_OUT);
+            connection.setReadTimeout(CONNECTION_TIME_OUT);
+            InputStream inputStream = connection.getInputStream();
+
+            bitmap = BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            // bitmap is already null
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+
+        }
+        return bitmap;
+    }
+
+    private class MyTimerTask extends TimerTask {
         @Override
         public void run() {
             timeBeforeRefresh -= REFRESH_STEP;
             timeBeforeRefreshLiveData.postValue(timeBeforeRefresh);
             if (timeBeforeRefresh <= 0) {
-                refreshData();
+                timeBeforeRefresh = REFRESH_PERIOD;
+                image.postValue(loadData(IMAGE_URL));
             }
-        }
-    }
-
-    public void refreshData() {
-        timeBeforeRefresh = REFRESH_PERIOD;
-        LoadDataTask performBackgroundTask = new LoadDataTask();
-        performBackgroundTask.execute(IMAGE_URL);
-    }
-
-    class LoadDataTask extends AsyncTask<String, Void, Bitmap> {
-        @Override
-        protected Bitmap doInBackground(String... urlToLoads) {
-
-            Bitmap bitmap = null;
-            try {
-                int i = 0;
-                URL url = new URL(urlToLoads[0]);
-
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setConnectTimeout(CONNECTION_TIME_OUT);
-                connection.setReadTimeout(CONNECTION_TIME_OUT);
-                InputStream inputStream = connection.getInputStream();
-
-                bitmap = BitmapFactory.decodeStream(inputStream);
-            } catch (IOException e) {
-                // bitmap is already null
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            image.setValue(bitmap);
         }
     }
 }

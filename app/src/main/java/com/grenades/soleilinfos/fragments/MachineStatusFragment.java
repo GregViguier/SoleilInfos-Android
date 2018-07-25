@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +39,11 @@ import android.widget.TextView;
 import com.grenades.soleilinfos.MachineStatusViewModel;
 import com.grenades.soleilinfos.R;
 
+import static android.content.ContentValues.TAG;
+
 public class MachineStatusFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final int REFRESH_PERIOD = 60;
+    private static final int REFRESH_PERIOD = 60;
     private SwipeRefreshLayout swipeRefreshLayout;
     private final Matrix matrix = new Matrix();
 
@@ -50,17 +53,13 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_machine_status, container, false);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setRefreshing(true);
+        swipeRefreshLayout.setOnRefreshListener(this);
         final ImageView imageView = view.findViewById(R.id.imageView);
         final ImageView errorImageView = view.findViewById(R.id.errorImageView);
         final TextView errorTextView = view.findViewById(R.id.errorTextView);
@@ -95,6 +94,7 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         viewerModel.getTimeBeforeRefresh().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
+                Log.d("TAG", "onChanged() called with: integer = [" + integer + "]");
                 timeBeforeNextLoadProgressBar.setProgress(REFRESH_PERIOD - integer);
             }
         });
@@ -102,9 +102,16 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView() called");
+    }
+
+    @Override
     public void onRefresh() {
+        Log.d(TAG, "onRefresh() called");
         MachineStatusViewModel viewerModel = ViewModelProviders.of(this).get(MachineStatusViewModel.class);
-        viewerModel.refreshData();
+        viewerModel.refreshDataAsync();
         swipeRefreshLayout.setRefreshing(false);
     }
 }
