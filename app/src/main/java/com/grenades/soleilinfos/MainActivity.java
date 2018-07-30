@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
-        transaction.commit();
+        if (!this.isDestroyed()) {
+            transaction.commitAllowingStateLoss();
+        }
     }
 }

@@ -20,7 +20,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@color/colorPrimary"
             android:contentDescription="Machine Status Image" />
 
     </android.support.v4.widget.SwipeRefreshLayout>

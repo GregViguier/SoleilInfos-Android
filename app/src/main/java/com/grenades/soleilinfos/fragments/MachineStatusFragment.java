@@ -28,7 +28,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +37,6 @@ import android.widget.TextView;
 
 import com.grenades.soleilinfos.MachineStatusViewModel;
 import com.grenades.soleilinfos.R;
-
-import static android.content.ContentValues.TAG;
 
 public class MachineStatusFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -76,17 +73,20 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
             @Override
             public void onChanged(@Nullable Bitmap bitmap) {
                 swipeRefreshLayout.setRefreshing(false);
-                if (bitmap != null) {
-                    // Hide error widgets
-                    errorImageView.setVisibility(View.INVISIBLE);
-                    errorTextView.setVisibility(View.INVISIBLE);
-                    imageView.setVisibility(View.VISIBLE);
-                    Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    imageView.setImageBitmap(rotatedBitmap);
-                } else {
-                    errorImageView.setVisibility(View.VISIBLE);
-                    errorTextView.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.INVISIBLE);
+                if (isAdded()) {
+                    if (bitmap != null) {
+                        // Hide error widgets
+                        errorImageView.setVisibility(View.INVISIBLE);
+                        errorTextView.setVisibility(View.INVISIBLE);
+                        imageView.setVisibility(View.VISIBLE);
+                        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                        imageView.setImageBitmap(rotatedBitmap);
+
+                    } else {
+                        errorImageView.setVisibility(View.VISIBLE);
+                        errorTextView.setVisibility(View.VISIBLE);
+                        imageView.setVisibility(View.INVISIBLE);
+                    }
                 }
             }
 
@@ -94,7 +94,6 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         viewerModel.getTimeBeforeRefresh().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
-                Log.d("TAG", "onChanged() called with: integer = [" + integer + "]");
                 timeBeforeNextLoadProgressBar.setProgress(REFRESH_PERIOD - integer);
             }
         });
@@ -104,12 +103,10 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d(TAG, "onDestroyView() called");
     }
 
     @Override
     public void onRefresh() {
-        Log.d(TAG, "onRefresh() called");
         MachineStatusViewModel viewerModel = ViewModelProviders.of(this).get(MachineStatusViewModel.class);
         viewerModel.refreshDataAsync();
         swipeRefreshLayout.setRefreshing(false);

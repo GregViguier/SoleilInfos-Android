@@ -8,7 +8,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_come_to"
-        android:icon="@android:drawable/ic_lock_lock"
+        android:icon="@android:drawable/arrow_down_float"
         android:title="@string/other"
         app:showAsAction="ifRoom" />
     <item
