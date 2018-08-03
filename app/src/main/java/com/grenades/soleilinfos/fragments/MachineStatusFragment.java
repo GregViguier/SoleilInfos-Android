@@ -63,7 +63,7 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         final ProgressBar timeBeforeNextLoadProgressBar = view.findViewById(R.id.horizontalProgressBar);
         timeBeforeNextLoadProgressBar.setMax(60);
 
-        // Instanciate maxtrix for Rotation when needed
+        // Instantiate matrix for Rotation when needed
         // because Machine Status image should be displayed in landscape mode
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postRotate(90);
