@@ -43,7 +43,7 @@ public class MachineStatusViewModel extends ViewModel {
     private static final int REFRESH_PERIOD = 60;
     private final MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
     private int timeBeforeRefresh = 0;
-    private SoleilInfosHandlerThread loadDataThread;
+    private final SoleilInfosHandlerThread loadDataThread;
 
     public MachineStatusViewModel() {
         new Timer().schedule(new RefreshImageTimerTask(), 500, 2000);
@@ -71,7 +71,7 @@ public class MachineStatusViewModel extends ViewModel {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                loadData(IMAGE_URL);
+                loadData();
                 timeBeforeRefresh = REFRESH_PERIOD;
             }
         };
@@ -81,16 +81,14 @@ public class MachineStatusViewModel extends ViewModel {
     /**
      * Load Data from SOLEIL's Web SiteZ
      *
-     * @param urlToLoad
      * @return the loaded bitmap
      */
     @Nullable
-    private Bitmap loadData(String urlToLoad) {
+    private Bitmap loadData() {
         Bitmap bitmap = null;
         HttpURLConnection connection = null;
         try {
-            int i = 0;
-            URL url = new URL(urlToLoad);
+            URL url = new URL(IMAGE_URL);
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(CONNECTION_TIME_OUT);
@@ -118,7 +116,7 @@ public class MachineStatusViewModel extends ViewModel {
             if (timeBeforeRefresh <= 0) {
                 // Let's refresh data
                 timeBeforeRefresh = REFRESH_PERIOD;
-                image.postValue(loadData(IMAGE_URL));
+                image.postValue(loadData());
             }
         }
     }

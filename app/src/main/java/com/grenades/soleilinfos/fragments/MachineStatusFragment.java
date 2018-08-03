@@ -44,11 +44,6 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
     private SwipeRefreshLayout swipeRefreshLayout;
     private final Matrix matrix = new Matrix();
 
-
-    public MachineStatusFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,15 +98,12 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         viewerModel.getTimeBeforeRefresh().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
-                timeBeforeNextLoadProgressBar.setProgress(REFRESH_PERIOD - integer);
+                if (integer != null) {
+                    timeBeforeNextLoadProgressBar.setProgress(REFRESH_PERIOD - integer);
+                }
             }
         });
         return view;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     /**
