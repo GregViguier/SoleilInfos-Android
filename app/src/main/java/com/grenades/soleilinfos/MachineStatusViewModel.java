@@ -39,14 +39,14 @@ public class MachineStatusViewModel extends ViewModel {
 
     private static final String IMAGE_URL = "https://www.synchrotron-soleil.fr/sites/default/files/WebInterfaces/machinestatus/MachineStatus-extranet.png";
     private static final int CONNECTION_TIME_OUT = 10000;
-    private static final int REFRESH_STEP = 2;
+    private static final int REFRESH_STEP = 1;
     private static final int REFRESH_PERIOD = 60;
     private final MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
     private int timeBeforeRefresh = 0;
     private SoleilInfosHandlerThread loadDataThread;
 
     public MachineStatusViewModel() {
-        new Timer().schedule(new MyTimerTask(), 500, 2000);
+        new Timer().schedule(new RefreshImageTimerTask(), 500, 2000);
 
         loadDataThread = new SoleilInfosHandlerThread("Refresh Data Thread");
         loadDataThread.start();
@@ -78,6 +78,12 @@ public class MachineStatusViewModel extends ViewModel {
         loadDataThread.postTask(runnable);
     }
 
+    /**
+     * Load Data from SOLEIL's Web SiteZ
+     *
+     * @param urlToLoad
+     * @return the loaded bitmap
+     */
     @Nullable
     private Bitmap loadData(String urlToLoad) {
         Bitmap bitmap = null;
@@ -103,12 +109,14 @@ public class MachineStatusViewModel extends ViewModel {
         return bitmap;
     }
 
-    private class MyTimerTask extends TimerTask {
+    private class RefreshImageTimerTask extends TimerTask {
         @Override
         public void run() {
+            // Publish timeBeforeRefresh for UI progressBar
             timeBeforeRefresh -= REFRESH_STEP;
             timeBeforeRefreshLiveData.postValue(timeBeforeRefresh);
             if (timeBeforeRefresh <= 0) {
+                // Let's refresh data
                 timeBeforeRefresh = REFRESH_PERIOD;
                 image.postValue(loadData(IMAGE_URL));
             }

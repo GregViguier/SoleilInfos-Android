@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 
 import com.grenades.soleilinfos.R;
 
-
+/**
+ * About fragment should display the usual 'about' stuff
+ */
 public class AboutFragment extends Fragment {
 
     public AboutFragment() {

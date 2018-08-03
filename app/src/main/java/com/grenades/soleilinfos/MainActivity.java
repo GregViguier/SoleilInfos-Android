@@ -37,16 +37,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView view = findViewById(R.id.navigationView);
+        BottomNavigationView bottomView = findViewById(R.id.navigationView);
+
+        // Default fragment -> MachineStatus
         loadFragment(new MachineStatusFragment());
 
-        view.setOnNavigationItemSelectedListener(
+        // Navigation logic
+        bottomView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_machine_status:
-                                // Create a new Fragment to be placed in the activity layout
                                 MachineStatusFragment machineStatusFragment = new MachineStatusFragment();
                                 loadFragment(machineStatusFragment);
                                 break;

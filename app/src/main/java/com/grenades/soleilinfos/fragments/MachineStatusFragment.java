@@ -54,16 +54,22 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_machine_status, container, false);
+
+        // SwipeRefreshLayout implementation (onRefresh() see below)
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(this);
+
         final ImageView imageView = view.findViewById(R.id.imageView);
         final ImageView errorImageView = view.findViewById(R.id.errorImageView);
         final TextView errorTextView = view.findViewById(R.id.errorTextView);
+
+        // ProgressBar displays delay next refresh (60 sec)
         final ProgressBar timeBeforeNextLoadProgressBar = view.findViewById(R.id.horizontalProgressBar);
         timeBeforeNextLoadProgressBar.setMax(60);
 
-        // Instanciate maxtrix for Rotation
+        // Instanciate maxtrix for Rotation when needed
+        // because Machine Status image should be displayed in landscape mode
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             matrix.postRotate(90);
         }
@@ -72,6 +78,7 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         viewerModel.getImage().observe(this, new Observer<Bitmap>() {
             @Override
             public void onChanged(@Nullable Bitmap bitmap) {
+                // New image is available: remove refresh arrow component
                 swipeRefreshLayout.setRefreshing(false);
                 if (isAdded()) {
                     if (bitmap != null) {
@@ -79,6 +86,7 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
                         errorImageView.setVisibility(View.INVISIBLE);
                         errorTextView.setVisibility(View.INVISIBLE);
                         imageView.setVisibility(View.VISIBLE);
+                        // Show loaded image
                         Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                         imageView.setImageBitmap(rotatedBitmap);
 
@@ -91,6 +99,7 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
             }
 
         });
+        // ProgressBar UI update
         viewerModel.getTimeBeforeRefresh().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
@@ -105,6 +114,9 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         super.onDestroyView();
     }
 
+    /**
+     * @see SwipeRefreshLayout.OnRefreshListener implementation
+     */
     @Override
     public void onRefresh() {
         MachineStatusViewModel viewerModel = ViewModelProviders.of(this).get(MachineStatusViewModel.class);
