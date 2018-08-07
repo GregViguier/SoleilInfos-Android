@@ -35,7 +35,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.grenades.soleilinfos.MachineStatusViewModel;
 import com.grenades.soleilinfos.R;
 
 public class MachineStatusFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
