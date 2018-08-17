@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="key_preference_machine_status">key_preference_machine_status</string>
+    <string name="key_preference_auto_refresh_machine_status">key_preference_auto_refresh_machine_status</string>
+    <string name="key_preference_machine_status_refresh_period">key_preference_machine_status_refresh_period</string>
+
+</resources>

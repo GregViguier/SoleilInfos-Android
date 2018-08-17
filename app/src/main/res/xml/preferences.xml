@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_machine_status"
+        android:key="@string/key_preference_machine_status">
+
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:title="@string/pref_machine_status_auto_refresh"
+            android:summary="@string/pref_machine_status_auto_refresh_sum"
+            android:defaultValue="true"
+            android:key="@string/key_preference_auto_refresh_machine_status" />
+        <com.grenades.soleilinfos.ui.util.EditTextPreferenceShowsSummary
+            android:title="@string/pref_machine_status_refresh_period"
+            android:defaultValue="60"
+            android:dependency="@string/key_preference_auto_refresh_machine_status"
+            android:key="@string/key_preference_machine_status_refresh_period" />
+    </PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>

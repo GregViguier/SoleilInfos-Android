@@ -7,4 +7,11 @@
     <string name="machine_status_image">Machine Status Image</string>
     <string name="error_image">Error Image</string>
     <string name="about_legal_text">Disclaimer:\nPortions of the materials used are trademarks and/or copyrighted works of Synchrotron SOLEIL.\n\nAll rights reserved by Synchrotron SOLEIL.\n\nThis material is not official and is not endorsed by Synchrotron SOLEIL."</string>
+    <string name="settings">Settings</string>
+
+    <!-- Preferences -->
+    <string name="pref_machine_status">Machine Status Settings</string>
+    <string name="pref_machine_status_auto_refresh">Auto Refresh Machine Status</string>
+    <string name="pref_machine_status_auto_refresh_sum">Enable/disable machine status image loading</string>
+    <string name="pref_machine_status_refresh_period">Machine Status Refresh Period (in seconds)</string>
 </resources>

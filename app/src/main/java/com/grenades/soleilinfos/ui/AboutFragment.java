@@ -1,4 +1,4 @@
-package com.grenades.soleilinfos.fragments;
+package com.grenades.soleilinfos.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

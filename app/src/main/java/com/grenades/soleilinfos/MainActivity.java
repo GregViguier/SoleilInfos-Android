@@ -26,9 +26,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.grenades.soleilinfos.fragments.AboutFragment;
-import com.grenades.soleilinfos.fragments.ComeToSoleilFragment;
-import com.grenades.soleilinfos.fragments.MachineStatusFragment;
+import com.grenades.soleilinfos.ui.AboutFragment;
+import com.grenades.soleilinfos.ui.ComeToSoleilFragment;
+import com.grenades.soleilinfos.ui.MachineStatusFragment;
+import com.grenades.soleilinfos.ui.SettingsFragment;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import timber.log.Timber;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -37,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView bottomView = findViewById(R.id.navigationView);
+        BottomNavigationViewEx bottomView = findViewById(R.id.navigationView);
+        bottomView.enableAnimation(false);
+        bottomView.enableShiftingMode(false);
+        bottomView.enableItemShiftingMode(false);
+
+        Timber.plant(new Timber.DebugTree());
 
         // Default fragment -> MachineStatus
         loadFragment(new MachineStatusFragment());
@@ -55,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.action_come_to:
                                 ComeToSoleilFragment comeToSoleilFragment = new ComeToSoleilFragment();
                                 loadFragment(comeToSoleilFragment);
+                                break;
+                            case R.id.action_settings:
+                                SettingsFragment settingsFragment = new SettingsFragment();
+                                loadFragment(settingsFragment);
                                 break;
                             case R.id.action_about:
                                 AboutFragment aboutFragment = new AboutFragment();
