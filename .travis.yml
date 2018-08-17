@@ -1,5 +1,5 @@
 language: android
 android:
-	licenses:
-          - 'android-sdk-license-.+'
-          - 'google-gdk-license-.+'
+  licenses:
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
