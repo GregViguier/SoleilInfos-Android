@@ -1,34 +1,12 @@
-language : android
-sudo : required
-jdk : oraclejdk8
-env:
-  global :
-    - ANROID_API_LEVEL = "27"
-    - ANDROID_BUILD_TOOLS_VERSION = "27.0.3"
-android :
-  components :
-    - tools
+language: android
+android:
+  components:
+    - tools # to get the new `repository-11.xml`
+    - tools # see https://github.com/travis-ci/travis-ci/issues/6040#issuecomment-219367943)
     - platform-tools
-    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - android - $ANDROID_API_LEVEL
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - addon-google_apis-google-$ANDROID_API_LEVEL
-  licences :
-    - 'android-sdk-preview-license-.+'
-    - 'android-sdk-license-.+'
-    - 'google-gdk-license-.+'
-before_script :
-        - mkdir -p "$ANDROID_HOME/licenses"
-before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-cache:
-  directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
-script :
-    - ./gradlew build check
+    - build-tools-27.0.3
+    - android-27
 before_install:
-- chmod +x gradlew
+  - yes | sdkmanager "platforms;android-27"
+script:
+   - ./gradlew build connectedCheck
