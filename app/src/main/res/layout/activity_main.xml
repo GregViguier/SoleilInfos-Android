@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:background="@color/primary"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="SOLEIL Informations"
+        app:title="SOLEIL Information"
         app:titleTextColor="@color/colorWhite" />
 
 </android.support.constraint.ConstraintLayout>

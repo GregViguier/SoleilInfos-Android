@@ -24,7 +24,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
 import android.support.v7.preference.PreferenceManager;
 
 import com.grenades.soleilinfos.R;
@@ -45,7 +44,7 @@ class MachineStatusViewModel extends AndroidViewModel implements SharedPreferenc
     private final MutableLiveData<Integer> timeBeforeRefreshLiveData = new MutableLiveData<>();
     private final MutableLiveData<Bitmap> image = new MutableLiveData<>();
 
-    private SharedPreferences preferences;
+    private final SharedPreferences preferences;
     private String key_auto_refresh;
     private String key_refresh_period;
 
@@ -69,12 +68,12 @@ class MachineStatusViewModel extends AndroidViewModel implements SharedPreferenc
     private void loadPreferences() {
         PreferenceManager.setDefaultValues(getApplication().getApplicationContext(), R.xml.preferences, false);
         Application app = getApplication();
-        if (app != null) {
-            Context context = app.getApplicationContext();
-            key_auto_refresh = context.getResources().getString(R.string.key_preference_auto_refresh_machine_status);
-            key_refresh_period = context.getResources().getString(R.string.key_preference_machine_status_refresh_period);
-            fetchPreferencesValues();
-        }
+
+        Context context = app.getApplicationContext();
+        key_auto_refresh = context.getResources().getString(R.string.key_preference_auto_refresh_machine_status);
+        key_refresh_period = context.getResources().getString(R.string.key_preference_machine_status_refresh_period);
+        fetchPreferencesValues();
+
     }
 
     private void fetchPreferencesValues() {
@@ -84,7 +83,7 @@ class MachineStatusViewModel extends AndroidViewModel implements SharedPreferenc
         int refreshPeriodValue = DEFAULT_REFRESH_PERIOD;
         try {
             refreshPeriodValue = Integer.valueOf(refreshPeriodStr);
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException ignored) {
 
         }
         refreshPeriod.setValue(refreshPeriodValue);
@@ -154,9 +153,7 @@ class MachineStatusViewModel extends AndroidViewModel implements SharedPreferenc
     /**
      * Load Data from SOLEIL's Web Site
      *
-     * @return the loaded bitmap
      */
-    @Nullable
     private void loadImage() {
         image.postValue(SoleilInfosRepository.getInstance().getImage());
     }

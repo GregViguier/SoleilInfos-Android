@@ -70,7 +70,9 @@ public class MachineStatusFragment extends Fragment implements SwipeRefreshLayou
         viewerModel.getRefreshPeriod().observe(this, new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer refreshPeriod) {
-                        timeBeforeNextLoadProgressBar.setMax(refreshPeriod);
+                        if (refreshPeriod != null) {
+                            timeBeforeNextLoadProgressBar.setMax(refreshPeriod);
+                        }
                     }
                 }
         );
