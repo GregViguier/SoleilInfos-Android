@@ -35,7 +35,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-class MachineStatusViewModel extends AndroidViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class MachineStatusViewModel extends AndroidViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final static int PROGRESS_BAR_REFRESH_PERIOD = 2;
     public static final int DEFAULT_REFRESH_PERIOD = 60;
