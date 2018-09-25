@@ -5,15 +5,15 @@ android {
         debugSigning {
             keyAlias 'key0'
             keyPassword 'soleilinfos-debug'
-            storeFile file('D:/Tools/Android/KeyStore/soleilInfos-debug.jks')
+            storeFile file('./soleilInfos-debug.jks')
             storePassword 'soleilinfos-debug'
         }
     }
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.grenades.soleil"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 5
         versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,14 +27,14 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:preference-v7:27.1.1'
-    implementation 'com.android.support:preference-v14:27.1.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support:preference-v7:28.0.0'
+    implementation 'com.android.support:preference-v14:28.0.0'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:support-v13:28.0.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
