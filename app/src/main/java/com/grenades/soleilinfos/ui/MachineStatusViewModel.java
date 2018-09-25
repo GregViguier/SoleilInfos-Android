@@ -35,6 +35,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("WeakerAccess")
 public class MachineStatusViewModel extends AndroidViewModel implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private final static int PROGRESS_BAR_REFRESH_PERIOD = 2;
