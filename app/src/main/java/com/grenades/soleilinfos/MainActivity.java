@@ -20,6 +20,7 @@ package com.grenades.soleilinfos;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.bottomnavigation.LabelVisibilityMode;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -30,7 +31,6 @@ import com.grenades.soleilinfos.ui.AboutFragment;
 import com.grenades.soleilinfos.ui.ComeToSoleilFragment;
 import com.grenades.soleilinfos.ui.MachineStatusFragment;
 import com.grenades.soleilinfos.ui.SettingsFragment;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import timber.log.Timber;
 
@@ -41,10 +41,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationViewEx bottomView = findViewById(R.id.navigationView);
-        bottomView.enableAnimation(false);
-        bottomView.enableShiftingMode(false);
-        bottomView.enableItemShiftingMode(false);
+        BottomNavigationView bottomView = findViewById(R.id.navigationView);
+        bottomView.setItemHorizontalTranslationEnabled(false);
+        bottomView.setLabelVisibilityMode(LabelVisibilityMode.LABEL_VISIBILITY_LABELED);
 
         Timber.plant(new Timber.DebugTree());
 
