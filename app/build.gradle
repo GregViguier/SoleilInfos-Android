@@ -9,6 +9,9 @@ android {
             storePassword 'soleilinfos-debug'
         }
     }
+    lintOptions {
+        abortOnError false
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.grenades.soleil"
@@ -36,5 +39,4 @@ dependencies {
     implementation 'com.android.support:support-v13:28.0.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
 }
